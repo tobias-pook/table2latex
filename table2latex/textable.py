@@ -354,11 +354,26 @@ class TexTable(object):
         #    self.table_cols = self.default_cols
         self.rows = self.sort_rows( row_list )
 
-    def add_row(tex_row):
+    def add_row(self, tex_row):
         ''' Add a single TexRow object to the table '''
         self.rows = self.sort_rows( self.rows + [tex_row] )
 
-    def add_header_line(self,linedict):
+    def add_row_dict(self, row_dict):
+        row = TexRow(self.table_cols,
+                     row_dict,
+                     groupkey=self.groupkey,
+                     group_func=self.group_func,
+                     hide_group=self.hide_group,
+                     replacements=self._replacements,
+                     row_group_separator=self.row_group_separator,
+                     col_func_map = self._col_func_map,
+                     col_merge_map = self._col_merge_map,
+                     col_raw_list = self._col_raw_list,
+                     significant_digits=self.significant_digits)
+        self.add_row(row)
+
+
+    def add_header_line(self, linedict):
         ''' Add a single line for the header lines.
             The header might consist of several rows for each
             column, e.g. unit in next row or multi column text.
