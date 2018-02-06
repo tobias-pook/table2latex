@@ -146,10 +146,11 @@ class TexTable(object):
         # init code
         self.rows = self.sort_rows( row_list )
 
-    def read_config(self, config_path):
+    def read_config(self, config):
         ''' Read config file objext (TexTableConfig) from file'''
-        config_file = imp.load_source("pycfg", config_path )
-        config = config_file.config
+        if isinstance(config, str):
+            config_file = imp.load_source("pycfg", config )
+            config = config_file.config
         private_attrs = ["table_cols",
                          "group_order",
                          "header_relacement_maps",
