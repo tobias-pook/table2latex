@@ -476,12 +476,12 @@ class TexRow(object):
         for key,val in rowdict.items():
             if not hasattr(self, key):
                 try:
-                    val = int(val)
+                    val = float(val)
+                    valint = int(val)
+                    if valint - val == 0:
+                        val = valint
                 except:
-                    try:
-                        val = float(val)
-                    except:
-                        pass
+                    pass
                 setattr(self, key, val)
             else:
                 print("Warning: key % used twice" % key)
