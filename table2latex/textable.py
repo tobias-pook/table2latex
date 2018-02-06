@@ -505,20 +505,27 @@ class TexRow(object):
 
     def col_value(self, colkey):
         ''' Return value for a column in the row with replacements applied '''
+        altered = False
+
         # check if values should be altered by func map
         if colkey in self._col_func_map:
             value = self._col_func_map[colkey](self)
+            altered = True
         else:
             value = getattr(self, colkey)
         # apply rounding for numbers
         if type(value) == float or type(value) == int:
-                value = self.rounding.latex( value )
+            value = self.rounding.latex( value )
+            altered = True
         else:
             # apply replacements for texts
-            replacement = self._replacements.apply_replacement(value, colkey)
+            if not altered:
+                replacement = self._replacements.apply_replacement(value, colkey)
+            else:
+                replacement = value
             if colkey in self._col_raw_list:
                 value
-            elif value == replacement:
+            elif value == replacement and not altered:
                 value = escape_latex(value)
             else:
                 value = replacement
@@ -597,7 +604,7 @@ class TexReplacements(object):
         # We now replaced all strings which should be replaced with tempstrings
         # without any escapable characters. We can now replace the remaining text
         # and finish the real replacement
-        input_string = escape_latex( input_string)
+        input_string = escape_latex(input_string)
         for key,val in real_replacement_map.items():
             input_string = input_string.replace(key, val)
 
