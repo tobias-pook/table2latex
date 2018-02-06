@@ -108,6 +108,7 @@ class TexTable(object):
                   landscape = False, # Flag for landscape mode
                   out = "outtable.tex", # output file
                   config = None, # path to python cofig file
+                  significant_digits = 3,
                   **kwargs):
         # settings
         self.chunksize = chunksize
@@ -121,6 +122,7 @@ class TexTable(object):
         self.out = out
         self.row_group_separator = row_group_separator
         self.default_col_separator = default_col_separator
+        self.significant_digits = significant_digits
         # fields
         self.tex = ""
 
@@ -341,7 +343,8 @@ class TexTable(object):
                              row_group_separator=self.row_group_separator,
                              col_func_map = self._col_func_map,
                              col_merge_map = self._col_merge_map,
-                             col_raw_list = self._col_raw_list)
+                             col_raw_list = self._col_raw_list,
+                             significant_digits=self.significant_digits)
 
                 row_list.append( row )
 
@@ -435,7 +438,8 @@ class TexRow(object):
                   col_func_map = {},
                   col_merge_map = {},
                   col_raw_list = [],
-                  replacements=None ):
+                  replacements=None,
+                  significant_digits=2 ):
         #settings
         self.rowkeys = rowkeys
         self.rowdict = rowdict
@@ -445,7 +449,7 @@ class TexRow(object):
         self._col_func_map = col_func_map
         self._col_merge_map = col_merge_map
         self._col_raw_list = col_raw_list
-        self.rounding = rounding.rounding(sigdigits=2, negdigits=3, posdigits=2)
+        self.rounding = rounding.rounding(sigdigits=significant_digits, negdigits=3, posdigits=2)
         self._group_func = group_func
         if replacements:
             self._replacements = replacements
